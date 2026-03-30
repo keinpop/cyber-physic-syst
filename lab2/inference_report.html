@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Inference Report — qwen2.5:0.5b</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@300..700&display=swap" rel="stylesheet">
+<style>
+:root,[data-theme=light]{
+  --bg:#f7f6f2;--surface:#ffffff;--surface-2:#f3f0ec;
+  --border:rgba(40,37,29,.10);--text:#28251d;--muted:#7a7974;--faint:#bab9b4;
+  --accent:#01696f;--accent-hi:#cedcd8;--accent-text:#fff;
+  --code-bg:#f0efeb;--shadow:0 2px 8px rgba(40,37,29,.08);
+  --radius:0.5rem;
+}
+[data-theme=dark]{
+  --bg:#171614;--surface:#1c1b19;--surface-2:#22211f;
+  --border:rgba(205,204,202,.10);--text:#cdccca;--muted:#797876;--faint:#5a5957;
+  --accent:#4f98a3;--accent-hi:#313b3b;--accent-text:#171614;
+  --code-bg:#201f1d;--shadow:0 2px 8px rgba(0,0,0,.30);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;
+  font-size:clamp(0.9rem,.85rem + .25vw,1rem);line-height:1.6;min-height:100dvh}
+/* ── header ── */
+header{
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:1.25rem 2rem;display:flex;align-items:center;
+  justify-content:space-between;gap:1rem;position:sticky;top:0;z-index:10;
+  box-shadow:var(--shadow);
+}
+.logo{display:flex;align-items:center;gap:.6rem;font-weight:700;font-size:1rem}
+.logo svg{flex-shrink:0}
+.theme-btn{background:none;border:1px solid var(--border);border-radius:var(--radius);
+  padding:.35rem .6rem;cursor:pointer;color:var(--muted);font-size:.8rem;
+  transition:color .18s,border-color .18s}
+.theme-btn:hover{color:var(--text);border-color:var(--accent)}
+/* ── hero ── */
+.hero{padding:2.5rem 2rem 2rem;max-width:1100px;margin-inline:auto}
+.hero h1{font-size:clamp(1.4rem,1.2rem + 1vw,2rem);font-weight:700;
+  letter-spacing:-.02em;margin-bottom:.5rem}
+.hero p{color:var(--muted);max-width:60ch}
+/* ── meta chips ── */
+.meta{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.25rem}
+.chip{background:var(--surface-2);border:1px solid var(--border);border-radius:9999px;
+  padding:.25rem .75rem;font-size:.78rem;color:var(--muted);
+  font-family:'JetBrains Mono',monospace}
+.chip b{color:var(--text)}
+.chip.accent{background:var(--accent-hi);border-color:transparent;color:var(--accent)}
+/* ── table ── */
+.table-wrap{max-width:1100px;margin:0 auto 3rem;padding:0 2rem;overflow-x:auto}
+table{width:100%;border-collapse:collapse;background:var(--surface);
+  border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+thead th{background:var(--surface-2);font-size:.78rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
+  padding:.75rem 1rem;border-bottom:1px solid var(--border);text-align:left}
+tbody tr{border-bottom:1px solid var(--border);transition:background .15s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--surface-2)}
+td{padding:.85rem 1rem;vertical-align:top;font-size:.9rem}
+.num{width:2.5rem;font-variant-numeric:tabular-nums;color:var(--faint);
+  font-family:'JetBrains Mono',monospace;font-size:.8rem}
+.query{width:32%;font-weight:500;color:var(--text)}
+.answer{color:var(--muted);line-height:1.65}
+.answer code,.answer pre{background:var(--code-bg);padding:.15em .35em;
+  border-radius:.25rem;font-family:'JetBrains Mono',monospace;font-size:.82em}
+.time{width:4.5rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;
+  color:var(--faint);white-space:nowrap;text-align:right}
+/* ── footer ── */
+footer{border-top:1px solid var(--border);text-align:center;
+  padding:1.5rem;color:var(--faint);font-size:.78rem}
+/* ── mobile ── */
+@media(max-width:640px){
+  header{padding:1rem}
+  .hero,.table-wrap{padding-inline:1rem}
+  .query{width:40%}
+  .time{display:none}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-label="Lab logo">
+      <rect width="28" height="28" rx="6" fill="var(--accent)" opacity=".15"/>
+      <path d="M7 21L11 7h2l2 9 2-5h3" stroke="var(--accent)" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="21" cy="19" r="2" fill="var(--accent)"/>
+    </svg>
+    <span>Inference Report</span>
+  </div>
+  <button class="theme-btn" data-theme-toggle aria-label="Switch theme">☀ / ☾</button>
+</header>
+
+<main>
+  <section class="hero">
+    <h1>Отчёт инференса LLM</h1>
+    <p>Результаты 10 запросов к модели <strong>qwen2.5:0.5b</strong> через Ollama HTTP API.</p>
+    <div class="meta">
+      <span class="chip accent"><b>Модель:</b> qwen2.5:0.5b</span>
+      <span class="chip"><b>Дата:</b> 30.03.2026 18:44</span>
+      <span class="chip"><b>Запросов:</b> 10</span>
+      <span class="chip"><b>Среднее время:</b> 1.78s</span>
+      <span class="chip"><b>Эндпоинт:</b> http://localhost:11434/api/generate</span>
+    </div>
+  </section>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Запрос к LLM</th>
+          <th>Вывод LLM</th>
+          <th>Время</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="num">1</td><td class="query">Что такое машинное обучение? Объясни кратко.</td><td class="answer">Машинное обучение - это технологический процесс, включающий сбор данных и разработку программного обеспечения для обучения искусственного интеллекта на основе этих данных. Этот процесс является важным шагом для создания машинных помощников, роботов и других систем искусственного интеллекта. <br><br>Вот что такое машинное обучение:<br><br>1. Сбор данных: Технология базируется на том, чтобы научить машину извлечь определенные логические, математические или связанные с ней данные.<br><br>2. Разработка программного обеспечения: Машинный обучения может включать разработку алгоритмов машинного обучения, таких как градиентная сгнина, гипербоннезависимая элита или логистическая логика.<br><br>3. Обучение: Программы находят определенные наборы данных и формируются под обучение.<br><br>4. Представление: Машинные системы используют полученный опыт для автоматического взаимодействия с реальностью.<br><br>5. Источники данных: Технологии машинного обучения могут включать в себя различные источники данных, такие как обменные сети и интернет.<br><br>Машинное обучение играет важную роль в разработке и внедрении автоматизированной системы и интеллекта. Благодаря технологии машинного обучения, мы можем с легкостью создать сложные системы, которые могут работать независимо от конкретных условий.</td><td class="time">2.06s</td></tr>
+<tr><td class="num">2</td><td class="query">Напиши функцию на Python для вычисления факториала числа.</td><td class="answer">Для генерации факториала числа в Python можно использовать рекурсивный подход. Вот пример функции, которая использует это решение:<br><br>```python<br>def factorial(n):<br>    if n == 0:<br>        return 1<br>    else:<br>        return n * factorial(n-1)<br>```<br><br>Эта функция принимает два аргумента: число `n`, которое нужно найти факториал, и возвращает его. Функция делится на 1 (если `n` равно 0), и затем приходит к рекурсивному вызову с разницей из-за уменьшения числа до которого нужно искать факториал.<br><br>Помните, что рекурсивная функция может быть сложной для понимания и быстрого выполнения в Python. Поэтому лучше использовать циклы или другие форматы работы с числами в этом случае.</td><td class="time">1.19s</td></tr>
+<tr><td class="num">3</td><td class="query">Какова столица Франции? Ответь одним предложением.</td><td class="answer">Москва.</td><td class="time">0.1s</td></tr>
+<tr><td class="num">4</td><td class="query">Объясни рекурсию простыми словами, как будто мне 10 лет.</td><td class="answer">Вот такая информация будет выглядеть для 10-летних школьников:<br><br>Рекурсия - это способ мышления, когда мы делаем шаг после шага и повторно применяем этот шаг к исходному выражению.<br><br>Пример: <br><br>- Если я брать лист бумаги, то я бы сделал следующий шаг - положил первый лист.<br>- Потом я взял второй лист, который вышел из первой и сделал шаг на следующий шаг - переплетал его вместе с первой бумагой.<br><br>Время от времени мы снова делаем этот шаг, пока все бумаги не вышли из нашего стола. Когда они выходят, мы повторяем эту часть процесса, но теперь используем что-то другое: листы бумаги вместо листов бумаги, или мы можем даже использовать другой вид бумаги - &quot;яблоко&quot; или &quot;груша&quot;.<br><br>Этот подход позволяет нам делать непосредственное изменение происходящего и продолжать это процесс до тех пор, пока не получим требуемого результата.</td><td class="time">1.48s</td></tr>
+<tr><td class="num">5</td><td class="query">Назови три преимущества регулярных физических упражнений.</td><td class="answer">Регулярные физические упражнения имеют множество преимуществ, которые помогают улучшить общее состояние здоровья и способствуют развитию телосложения. Вот три из них:<br><br>1. Усиление мышечной массы: Практика регулярных упражнений может увеличить число жира и мышечных меток в теле. Это делает ваш организм более эффективным гибридом, который способствует развитию телосложения и снижению риска диабета.<br><br>2. Восстановление организма: Средство для роста — это часть комплекса индивидуальных технологий, которые помогают организму восстанавливаться после долгого прогрессирования в периоды недавнего отдыха или утраты сил. <br><br>3. Развитие физиологии: Практика регулярных упражнений может помочь вам развивать различные области физической и дыхательной деятельности, которые помогают поддерживать высокий уровень физического здоровья.<br><br>Таким образом, регулярные упражнения могут привести к увеличению мышечных масс и увеличению физиологических свойств тела, что в итоге способствует созданию здорового и функционирующего телосложения.</td><td class="time">1.83s</td></tr>
+<tr><td class="num">6</td><td class="query">Напиши сказку о весне в 5 предложений.</td><td class="answer">Весна – это время, когда жизнь начинает чувствовать себя более активной и веселее. Всем известно, что весна оставляет пальцы от дрожей и любит быть веселым. Она выходит из дома и поднимает все свои лучшие качества, как красота, привлекательность и энергетика. <br><br>Мастера садов отправляются на работу, а на улице звенят звуки машин и ругательств. Медсестры помогают обезплинять дом и помочь с кормом. Грибы и плоды вяло выглядят, но они делают все лучше для весны. Овощи по-прежнему выделяют свои полезные свойства, как свекла или клубни.<br><br>Солнце заливает деревья и птичьи корма в красном цвете, словно баланс, который только начинает расти. Весна – это время, когда все вокруг становится более веселым и интересным, и у каждого из нас в этот момент может быть особенная династия.<br><br>Весной люди становятся более активными и разнообразными, обладая уникальными способностями, которые только что приобрели. Мягкий свет солнца делает все лучше на свежем воздухе, создавая новые идеи для каждого человека, несмотря на то, как весна может быть затруднительной или тяжелой.<br><br>Солнце, как всегда, помогает в этот период времени, открывая дорогу к весенней красоте. Весной люди становятся все более привлекательными и смело делают то, что им нравится, несмотря на то, что могут быть трудности и затруднения.</td><td class="time">2.44s</td></tr>
+<tr><td class="num">7</td><td class="query">Что такое протокол HTTP? Кратко поясни принцип работы.</td><td class="answer">HTTP (Hypertext Transfer Protocol) — это протокол протокола электронной коммуникации HTTP использует TCP/IP (Transmission Control Protocol/Internet Protocol) для передачи информации. Он представляет собой сетевую интерпретационную систему, которая позволяет пользователю сгенерировать и отправить запросы к серверу и получить ответы.<br><br>Кратко говоря, протокол HTTP обеспечивает взаимодействие между клиентом и сервером для передачи текстовых и формата файлов. Он использует сокеты TCP/IP для обмена данными и предоставляет ввод и вывод информации пользователю. Client-side HTTP используется для запросов, а сервер-side HTTP используется для отправки данных.<br><br>Пример использования:<br>- Существуют различные версии протокола HTTP, включая HTTP/1.0, HTTP/1.1, HTTP/2, HTTP/3 и HTTP/4.<br>- Веб-разработчики обычно используют HTTP/1.1 для обмена данными между клиентом и сервером.<br>- На серверах часто используются протоколы HTTPS (Secure Hypertext Transfer Protocol), которые предоставляют надежность при передаче данных.<br><br>HTTP является важным инструментом для управления веб-сайтами и позволяет пользователям отправлять и получать информацию из интернет-ресурсов.</td><td class="time">1.81s</td></tr>
+<tr><td class="num">8</td><td class="query">В чём разница между списком (list) и кортежем (tuple) в Python?</td><td class="answer">Списки (list) и кортежи (tuple) - это два вида данных, которые используются в программировании Python для хранения и обработки данных. Однако, в реальном мире эти два типа данных не являются индивидуальными, так как они часто используются вместе.<br><br>Вот ключевые различия:<br><br>1. Область применения:<br>   - Списки: используется для хранения набора различных типов данных (например, числовых и строковых).<br>   - Кортежи: используется для хранения неизменяемого набора различных типов данных.<br><br>2. Функциональные свойства:<br>   - Списки: имеют методы add() и append().<br>   - Кортежи: имеют методы __add__ и __radd__ для объединения с другими кортежами, а также методы join() для создания кортежа из множества строк.<br><br>3. Математическая информация:<br>   - Списки: упорядоченный набор данных.<br>   - Кортежи: неупорядоченный набор данных с неизменяемыми элементами.<br><br>4. Обеспечивает доступ к элементам по индексу и словарям (цифры, строки):<br>   - Списки: доступны по индексу и по ключам.<br>   - Кортежи: доступны только по ключу и по индексу.<br><br>5. Не могут быть изменены:<br>   - Списки: изменяемость ограничена только при помощи методов.<br>   - Кортежи: неизменяемость, упорядоченная с помощью __add__.<br><br>6. Преимущества использования:<br>   - Списки: удобно для хранения и операций по индексу.<br>   - Кортежи: лучший выбор для структурированных данных с неизменяемыми элементами.<br><br>7. Управление разными типами данных:<br>   - Списки: удобно использовать для хранения списков (с использованием методов append() и insert()).<br>   - Кортежи: более подходящий для хранения строковых данных без изменяемых элементов.<br><br>8. Применение:<br>   - Списки: основное в Python.<br>   - Кортежи: используются в большей части реализации, а также в некоторых языках программирования.<br><br>Таким образом, списки и кортежи обычно используются вместе, чтобы обеспечить определенные преимущества по удобству использования и простоте работы.</td><td class="time">3.35s</td></tr>
+<tr><td class="num">9</td><td class="query">Какова временная сложность алгоритма бинарного поиска?</td><td class="answer">Бинарный поисковый алгоритм имеет стандартную сложность, которую можно охарактеризовать как O(log n), где n - это размер исходной строки.<br><br>В общем виде данная сложность выразим как:<br><br>\[ O(\log n) = O(n \cdot \lg n) \]<br><br>Теперь, давайте рассмотрим подробнее разные случаи этой сложности:<br><br>1. **Минимальное случай**:<br>   - При `n` больших и `m = 1`, то `O(\log n) = O(1)`.<br>   - Это очень простой алгоритм, который проходит только один раз по строке.<br><br>2. **Часто встречающиеся случаи**:<br>   - При `m &lt; n`: `n` меньше `m`, так что `O(\log n) = O(n \cdot \lg n)`.<br>   - Чем больше `m` (и тем более `n`), то `O(\log n) = O(n \cdot \lg n)` становиться все меньше и меньше.<br><br>3. **Сложность рекурсивного алгоритма**:<br>   - При `n &gt; 10^8` алгоритм рекурсивный, так как `O(\log n) = O(2n \log n)`.<br>     - Это может оставить `n` строк в худшем случае, но с очень большими `m` это сложность.<br><br>4. **Опять же, рекурсивные алгоритмы**: <br>   - При `n &lt; 10^8` рекурсивный алгоритм, так как `O(\log n) = O(2^{n \cdot \lg n})`, что также может оставить `n` строк.<br>     - Это делает алгоритм очень сложным и может оставаться до тех пор, пока `m &lt; 10^8`.<br><br>5. **Чистый слой алгоритма**:<br>   - При `m = n`, алгоритм просто считывает всю строку и возвращает результат, что тоже `O(\log n)`.<br><br>6. **Оптимизация рекурсивного алгоритма**:<br>   - Если рекурсивный алгоритм обрабатывает все возможные случаи, то его сложность может быть на порядок меньше O(log n), но это зависит от конкретной реализации и алгоритмов. <br><br>В общем, бинарный поисковый алгоритм имеет стандартную сложность `O(\log n)` и является одним из самых быстрых среди всех алгоритмов.</td><td class="time">3.45s</td></tr>
+<tr><td class="num">10</td><td class="query">Переведи на английский: «Привет, как у тебя дела?»</td><td class="answer">&quot;Hello, how is your day going?&quot;</td><td class="time">0.13s</td></tr>
+
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<footer>Лабораторная работа 2: NLP · Кибер-физические системы · 2026</footer>
+
+<script>
+(function(){
+  const btn=document.querySelector('[data-theme-toggle]'),h=document.documentElement;
+  let d=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
+  h.setAttribute('data-theme',d);
+  btn&&btn.addEventListener('click',()=>{
+    d=d==='dark'?'light':'dark';
+    h.setAttribute('data-theme',d);
+  });
+})();
+</script>
+</body>
+</html>
